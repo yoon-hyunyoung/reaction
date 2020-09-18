@@ -4,19 +4,20 @@ import React, {useState} from 'react';
 function Silsoup04() {
    // const state = true
     
-    const [num, setNum] = React.useState(0);
-    const [student, setStudent] = React.useState({name:'홍길동', math:80, science:30, english:60});
+    
+    const [num, setNum] = React.useState([1,2,3,4,5,6,7,8,9]);
     const click = (event) => {
         console.log("클릭")
-        setStudent({...student, math:0, science:0, english:0})
-    }
+        setNum([...num.slice(0, 4), 0, 0, ...num.slice(6, 10)])
+        }
 
     return (
         <div>
-            {JSON.stringify(student)}
-            <button onClick={click}>0으로 만들기</button>
+            {JSON.stringify(num)}
+            <button onClick={click}>5와 6을 0으로 바꾸기</button>
             
         </div>
     )
 };
+
 export default Silsoup04;

@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 function Silsoup03() {
    // const state = true
     
-    const [num, setNum] = React.useState(0);
+    
     const [student, setStudent] = React.useState({name:'홍길동', math:80, science:30, english:60});
     const click = (event) => {
         console.log("클릭")
