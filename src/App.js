@@ -8,6 +8,8 @@ import Welcome from 'Welcome';
 import Bbutton from 'Bbutton';
 import Silsoup01 from 'Silsoup01'
 import Silsoup02 from 'Silsoup02'
+import Silsoup03 from 'Silsoup03'
+import Silsoup04 from 'Silsoup04'
 
 const  x = [2, 3, 4, 5, 7]
 const map = x.map(x => x / 9);
@@ -43,13 +45,15 @@ function JsxTest() {
 function App() {
   return (
     <div>
-      <Count/>
+      {/* <Count/>
       <Welcome/>
       <Act/>
       <Bbutton/>
       <JsxTest/>
       <Silsoup01/>
-      <Silsoup02/>
+      <Silsoup02/> */}
+      <Silsoup03/>
+      <Silsoup04/>
     </div>
   );
 }

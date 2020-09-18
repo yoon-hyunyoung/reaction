@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 
 function Silsoup02() {
    // const state = true
-    const [state, setState] = useState(1);
+    const [state, setState] = useState(true);
     const click = (event) => {
         if (state == true){
             setState(false)
