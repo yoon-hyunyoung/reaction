@@ -6,15 +6,19 @@ import Count from 'Count';
 import Act from 'Act';
 import Welcome from 'Welcome';
 import Bbutton from 'Bbutton';
-import Silsoup01 from 'Silsoup01'
-import Silsoup02 from 'Silsoup02'
-import Silsoup03 from 'Silsoup03'
-import Silsoup04 from 'Silsoup04'
-import Parents from 'Parents'
-import Add_p from 'Add_p'
-import Gugudan_p from 'Gugudan_p'
-import Todolist_p from 'Todolist_p'
-import Hovertest from 'Hovertest'
+import Silsoup01 from 'Silsoup01';
+import Silsoup02 from 'Silsoup02';
+import Silsoup03 from 'Silsoup03';
+import Silsoup04 from 'Silsoup04';
+import Parents from 'Parents';
+import Add_p from 'Add_p';
+import Gugudan_p from 'Gugudan_p';
+import Todolist_p from 'Todolist_p';
+import Hovertest from 'Hovertest';
+import CountArray from 'CountArray';
+import Clock from 'Clock'
+import Timer from 'Timer'
+
 // function Parents()
 // {
 //   const [num, setNum] = React.useState(50)
@@ -99,9 +103,12 @@ function App() {
       <Silsoup04/>
       <Parents/>
       <Add_p/> 
-      <Gugudan_p/> */}
+      <Gugudan_p/>
       <Todolist_p/>
-      <Hovertest/>
+      <Hovertest/> */}
+      {/* <CountArray/>
+      <Clock/><br/><br/> */}
+      <Timer/>
     </div>
   );
 }
