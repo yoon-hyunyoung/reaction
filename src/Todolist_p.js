@@ -12,6 +12,15 @@ export default function TodoList(){
         setTodoList([...todoList,text]);
         setText("");
     }
+    const press = (e) => {
+        console.log(e)
+        if (e.key == 'enter'){
+            click()
+        }
+    }
+    const deleteTodo = (index) => {
+        setTodoList([...todoList.slice(0, index), ...todoList.slice(index+1, todoList.length)])
+    }
 
     return (
         <>
@@ -20,17 +29,26 @@ export default function TodoList(){
         <button onClick={click}>추가</button>
         {
             todoList.map((v, i)=>{
-                return <Todo i={i} v={v}/>
+                return <Todo i={i} v={v}
+                deleteTodo={deleteTodo}/>
             })
         }
+        
+      
         </>
     )
 }
 
-function Todo({i, v}){
+function Todo({i, v, deleteTodo}){
+
+    const click = (e) => {
+        console.log(i)
+        deleteTodo(i)
+    }
+
     return (
     <div>
-        {i} {v}
+        {i} {v} <button onClick={click}>삭제</button>
     </div>
     )
 }
