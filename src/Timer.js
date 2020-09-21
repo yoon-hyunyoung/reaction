@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+
+
 export default function Timer() {
 
     const [timer, setTimer] = useState([]);
@@ -37,7 +39,7 @@ function TimerTime({startTime}) {
         //컴포넌트가 생성될때 한번만
         const inter = setInterval(()=> {
             setTimer(new Date().getTime() - startTime.getTime())
-        }, 999)
+        }, 1000)
 
         return () => {
             //컴포넌트 종료될때 실행

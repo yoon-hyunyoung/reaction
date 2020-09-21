@@ -18,6 +18,7 @@ import Hovertest from 'Hovertest';
 import CountArray from 'CountArray';
 import Clock from 'Clock'
 import Timer from 'Timer'
+import RSP from 'RSP'
 
 // function Parents()
 // {
@@ -109,6 +110,7 @@ function App() {
       {/* <CountArray/>
       <Clock/><br/><br/> */}
       <Timer/>
+      <RSP/>
     </div>
   );
 }
