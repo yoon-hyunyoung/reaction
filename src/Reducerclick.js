@@ -26,8 +26,9 @@ export default function Reducerclick(){
 return(
     
     <>
-    {cnt}
-    <button onClick={click}>변경</button>
+    <span style={{fontSize:"50px"}}>버튼을 눌러 +1 하세요</span><br/>
+    <span style={{margin:"100px"}}><span style={{fontSize:"30px"}}>{cnt}</span>
+    <button style={{fontSize:"20px"}} onClick={click}>+1</button></span>
     
 
     </>

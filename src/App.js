@@ -21,6 +21,12 @@ import Timer from 'Timer'
 import RSP from 'RSP'
 import Testreducer from 'Testreducer'
 import Reducerclick from 'Reducerclick'
+import Contextapitest from 'Contextapitest'
+import Contextss from 'Contextss'
+import Axiostest from 'Axiostest'
+
+
+
 
 
 // function Parents()
@@ -114,8 +120,15 @@ function App() {
       <Clock/><br/><br/>
       <Timer/>
       <RSP/>
-      <Testreducer/> */}
+      <Testreducer/>
       <Reducerclick/>
+      <Contextapitest/>
+      <Contextss/> */}
+      <Axiostest/>
+
+
+
+
     </div>
   );
 }
