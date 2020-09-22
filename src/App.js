@@ -19,6 +19,9 @@ import CountArray from 'CountArray';
 import Clock from 'Clock'
 import Timer from 'Timer'
 import RSP from 'RSP'
+import Testreducer from 'Testreducer'
+import Reducerclick from 'Reducerclick'
+
 
 // function Parents()
 // {
@@ -109,8 +112,10 @@ function App() {
       <Hovertest/>
       <CountArray/>
       <Clock/><br/><br/>
-      <Timer/> */}
+      <Timer/>
       <RSP/>
+      <Testreducer/> */}
+      <Reducerclick/>
     </div>
   );
 }
