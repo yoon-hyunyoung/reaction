@@ -106,10 +106,10 @@ function App() {
       <Add_p/> 
       <Gugudan_p/>
       <Todolist_p/>
-      <Hovertest/> */}
-      {/* <CountArray/>
-      <Clock/><br/><br/> */}
-      <Timer/>
+      <Hovertest/>
+      <CountArray/>
+      <Clock/><br/><br/>
+      <Timer/> */}
       <RSP/>
     </div>
   );
