@@ -23,7 +23,7 @@ export default function Axiosscore() {
         <div>
             {
                 scores.map((v)=>{
-                    return <div id={v.id} onClick={click}>1111{v.name}</div>
+                    return <div id={v.id} onClick={click}>{v.name}</div>
                 })
             }
             <hr/>
