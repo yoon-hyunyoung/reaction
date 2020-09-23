@@ -28,7 +28,7 @@ function Contextsss(){
         age:0
     });
 
-    const change = {e} => {
+    const change = (e) => {
         const {value, name} = e.target;
         setStu({})
     }

@@ -1,10 +1,11 @@
 import React from 'react';
 import Axios from 'axios';
-export default function Axiostest() {
+import API from 'Api';
+export default function AxiosTest() {
     const [students, setStudents] = React.useState([]);
     const [id, setId] = React.useState(null);
     React.useEffect(()=>{
-        Axios.get("http://127.0.0.1:8000/api/study/students/")
+        API.get("study/students/")
         .then(res => {
             console.log(res);
             const { data } = res;
@@ -13,21 +14,46 @@ export default function Axiostest() {
             console.log(error);
         })
     }, [])
+    const click = (e) => {
+        console.log(e.target.id);
+        setId(e.target.id);
+    }
     return(
         <div>
             {
                 students.map((v)=>{
-                return <div>{v.name} {v.address} {v.email}</div>
+                    return <div id={v.id} onClick={click}>{v.name}</div>
                 })
             }
+            <hr/>
             <AxiosTestDetail id={id}/>
         </div>
     )
 }
 function AxiosTestDetail({id}) {
+    const [student, setStudent] = React.useState(null)
+    React.useEffect(()=> {
+        API({
+            method:"GET",
+            url:"study/students/" + id
+        })
+        .then(res => {
+            console.log(res);
+            const { data } = res;  
+            setStudent(data);
+        }).catch(error=>{
+            console.log(error);
+        })
+        console.log("ID 가 변경됨~")
+    },[id])
     return(
     <div>
-        디테일
+        {student && <div>
+            <span>{student.name}</span>    
+            <span>{student.address}</span>    
+            <span>{student.email}</span>    
+            <span>{student.memo}</span>    
+        </div>}
     </div>
     )
 }

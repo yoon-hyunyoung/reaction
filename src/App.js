@@ -24,6 +24,7 @@ import Reducerclick from 'Reducerclick'
 import Contextapitest from 'Contextapitest'
 import Contextss from 'Contextss'
 import Axiostest from 'Axiostest'
+import Axiosscore from 'Axiosscore';
 
 
 
@@ -125,6 +126,7 @@ function App() {
       <Contextapitest/>
       <Contextss/> */}
       <Axiostest/>
+      <Axiosscore/>
 
 
 
