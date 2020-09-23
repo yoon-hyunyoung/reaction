@@ -25,7 +25,7 @@ import Contextapitest from 'Contextapitest'
 import Contextss from 'Contextss'
 import Axiostest from 'Axiostest'
 import Axiosscore from 'Axiosscore';
-
+import Routertest from 'Routertest';
 
 
 
@@ -127,6 +127,7 @@ function App() {
       <Contextss/> */}
       <Axiostest/>
       <Axiosscore/>
+      <Routertest/>
 
 
 
