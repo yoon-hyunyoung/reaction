@@ -28,7 +28,7 @@ function Nopage()
 {
     return(
         <div>
-            잘못 url 입력했을때 나옵니다
+             url을 잘못 입력했을때 나옵니다
         </div>
     )
 }
