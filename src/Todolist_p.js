@@ -14,7 +14,7 @@ export default function TodoList(){
     }
     const press = (e) => {
         console.log(e)
-        if (e.key == 'enter'){
+        if (e.key == 'Enter'){
             click()
         }
     }
@@ -25,7 +25,8 @@ export default function TodoList(){
     return (
         <>
         <input value={text}
-               onChange={(e)=>setText(e.target.value)}/>
+               onChange={(e)=>setText(e.target.value)}
+               onKeyPress={press}/>
         <button onClick={click}>추가</button>
         {
             todoList.map((v, i)=>{

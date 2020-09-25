@@ -26,7 +26,8 @@ import Contextss from 'Contextss'
 import Axiostest from 'Axiostest'
 import Axiosscore from 'Axiosscore';
 import Routertest from 'Routertest';
-
+import Router01 from 'Router01';
+import Yoon from 'Yoon';
 
 
 
@@ -115,7 +116,7 @@ function App() {
       <Parents/>
       <Add_p/> 
       <Gugudan_p/>
-      <Todolist_p/>
+      
       <Hovertest/>
       <CountArray/>
       <Clock/><br/><br/>
@@ -124,13 +125,14 @@ function App() {
       <Testreducer/>
       <Reducerclick/>
       <Contextapitest/>
-      <Contextss/> */}
+      <Contextss/>
       <Axiostest/>
       <Axiosscore/>
       <Routertest/>
-
-
-
+      <Router01/>*/}
+      <Yoon/> 
+      <Todolist_p/>
+      
 
     </div>
   );
