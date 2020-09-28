@@ -96,15 +96,15 @@ function EPL(){
 
         return (
           <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
-      <div  style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
+      <div  style={{overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
         soccer1.map((data1, i)=>{
-          return <div>{data1.status}<br/><ul>{i+1}위 {data1.name}
+        return <div>{data1.status}<br/><ul>{i+1}위 {data1.name}/ {data1.status}/ {data1.win}/ {data1.draw}/ {data1.lose}/ {data1.score}
           <Button onClick={()=>{Delete___Click(data1.seq)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} /></ul></div>
         })}</div>
           </>
         )
         }
-  
+
 function EFL(){
   const [soccer2, setSoccer2] =React.useState([]);
   React.useEffect(() => {
