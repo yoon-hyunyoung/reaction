@@ -7,7 +7,10 @@ import { BrowserRouter, Route, Link, NavLink, Switch} from 'react-router-dom';
 import logo from 'assets/logo.JPG';
 import { Menu } from 'antd';
 import axios from 'axios';
-
+import { List, Avatar, Button } from 'antd';
+import { SearchOutlined, RestOutlined, PlusOutlined } from '@ant-design/icons';
+import Api from 'Api';
+import img from 'assets/logo.JPG'
 
 const { SubMenu } = Menu;
 
@@ -31,7 +34,7 @@ export default function Yoon(){
         defaultSelectedKeys={[state.current]}
         defaultOpenKeys={[state2.current2]}
         mode="inline"
-      >
+      ><img src={img} style={{width:"210px"}}></img>
         <SubMenu
           key="sub1"
           title={
@@ -50,9 +53,7 @@ export default function Yoon(){
         </SubMenu>
         <SubMenu key="sub2" icon={<ProfileOutlined />} title="빅매치">
         <Menu.ItemGroup key="g2" title="더비매치/챔스티켓/강등매치">
-          <Menu.Item key="5">더비</Menu.Item>
-          <Menu.Item key="6">챔스권 경기</Menu.Item>
-          <Menu.Item key="8">강등권 경기</Menu.Item>
+          <Menu.Item key="5"><NavLink exact to="/bigmatch">빅매치</NavLink></Menu.Item>
           </Menu.ItemGroup>
         </SubMenu>
         
@@ -60,6 +61,7 @@ export default function Yoon(){
       <Route exact path="/epl" component={EPL}/>
       <Route exact path="/efl" component={EFL}/>
       <Route exact path="/league1" component={LEAGUE1}/>
+      <Route exact path="/bigmatch" component={Bigmatch}/>
        </>
        </BrowserRouter>
       );
@@ -78,95 +80,233 @@ function EPL(){
           });
         },[])
   
-  return(
-  <>
-  <span>
-  {
-  soccer1.map((data1)=>{
-    return <li>{data1.name}{data1.status}</li>
-  })}
-  </span>
- 
-  
-  </>
-  )
-}
+        const Delete___Click  = (seq) => {
+          Api.delete('yoonproject/league1/'+ seq) // 삭제 명령을 주고..
+          .then(response =>{
+            return Api.get('yoonproject/league1?seq='+ seq) // 삭제된 화면을 출력!
+        }).then(response=>{
+            const{data} = response;
+            setSoccer1(prev => ({
+              ...prev,
+              [seq]:data
+            }));
+      
+        });
+        }
+
+        return (
+          <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+      <div  style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
+        soccer1.map((data1, i)=>{
+          return <div>{data1.status}<br/><ul>{i+1}위 {data1.name}
+          <Button onClick={()=>{Delete___Click(data1.seq)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} /></ul></div>
+        })}</div>
+          </>
+        )
+        }
   
 function EFL(){
-  const [soccer1, setSoccer1] =React.useState([]);
+  const [soccer2, setSoccer2] =React.useState([]);
   React.useEffect(() => {
     axios.get('http://localhost:8000/api/yoonproject/efl/')
     .then(response =>{
       const{data} = response;
-      setSoccer1(data);
+      setSoccer2(data);
       }).catch(error=> {console.error(error);
       });
     },[])
-  return (
-    <>
- <div>{
-  soccer1.map((data2)=>{
-    return <div>{data2.name}{data2.status}{data2.group}</div>
-  })}</div>
-    </>
-  )
-}
+
+    const Delete__Click  = (seq) => {
+      Api.delete('yoonproject/league1/'+ seq) // 삭제 명령을 주고..
+      .then(response =>{
+        return Api.get('yoonproject/league1?seq='+ seq) // 삭제된 화면을 출력!
+    }).then(response=>{
+        const{data} = response;
+        setSoccer2(prev => ({
+          ...prev,
+          [seq]:data
+        }));
+  
+    });
+    }
+
+    return (
+      <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+  <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
+    soccer2.map((data2, i)=>{
+      return <div>{data2.status}<br/><ul>{i+1}위 {data2.name}
+      <Button onClick={()=>{Delete__Click(data2.seq)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} /></ul></div>
+    })}</div>
+      </>
+    )
+    }
 
 function LEAGUE1(){
  
   
-  const [soccer1, setSoccer1] =React.useState([]);
+  const [soccer3, setSoccer3] =React.useState([]);
   React.useEffect(() => {
     axios.get('http://localhost:8000/api/yoonproject/league1/')
     .then(response =>{
       const{data} = response;
-      setSoccer1(data);
+      setSoccer3(data);
       }).catch(error=> {console.error(error);
       });
     },[])
+
+    const Delete_Click  = (seq) => {
+      Api.delete('yoonproject/league1/'+ seq) // 삭제 명령을 주고..
+      .then(response =>{
+        return Api.get('yoonproject/league1?seq='+ seq) // 삭제된 화면을 출력!
+    }).then(response=>{
+        const{data} = response;
+        setSoccer3(prev => ({
+          ...prev,
+          [seq]:data
+        }));
+  
+    });
+    }
+  
+
+
   return (
-    <>
-<div style={{float:"left", marginLeft:"200px", width:"200px", height:"10px"}}>{
-  soccer1.map((data3)=>{
-    return <ul>{data3.name}{data3.status}{data3.group}</ul>
+    <div style={{height:"1000px", width:"1500px"}}>
+      <div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+<div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
+  soccer3.map((data3, i)=>{
+  return <div>{data3.status}<br/><ul>{i+1}위 {data3.name}//{data3.group_name}
+  <Button onClick={()=>{Delete_Click(data3.seq)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} /></ul></div>
+          
   })}</div>
-    </>
+    </div>
+    
   )
   }
 
-// function EPL(){
+function Bigmatch(){
+  const [matchs, setMatchs] =React.useState({
+    더비: [],
+    챔스권경기: [],
+    강등권경기: []
+  });
+  React.useEffect(() => {
+    Api.get('yoonproject/bigmatch?group=1')
+    .then(response =>{
+    const{data} = response;
+    setMatchs(prev => ({
+        ...prev,
+        더비:data
+      }));
+      }).catch(error=> {console.error(error);
+      });
+   
+    Api.get('yoonproject/bigmatch?group=4')
+    .then(response =>{
+    const{data} = response;
+    console.log(data);
+    setMatchs(prev => ({
+        ...prev,
+        챔스권경기:data
+      }));
+      }).catch(error=> {console.error(error);
+      });
+  
+    Api.get('yoonproject/bigmatch?group=3')
+    .then(response =>{
+    const{data} = response;
+    setMatchs(prev => ({
+      ...prev,
+      강등권경기:data
+    }));
+    }).catch(error=> {console.error(error);
+    });
+  },[])
+  
+  // const InsertClick = () => {
 
-//   return (
-//     <>
-// EPL
-//     </>
-//   )
-// }
+  // }
+  
+  const DeleteClick  = (seq, group) => {
 
-// function EPL(){
+    const bigmatchs = ['','더비','','강등권경기','챔스권경기']
 
-//   return (
-//     <>
-// EPL
-//     </>
-//   )
-// }
+    Api.delete('yoonproject/bigmatch/'+ seq) // 삭제 명령을 주고..
+    .then(response =>{
 
-// function EPL(){
+      return Api.get('yoonproject/bigmatch?group='+ group) // 삭제된 화면을 출력!
+  }).then(response=>{
 
-//   return (
-//     <>
-// EPL
-//     </>
-//   )
-// }
+      const{data} = response;
+      setMatchs(prev => ({
+        ...prev,
+        [bigmatchs[group]]:data
+      }));
 
-// function EPL(){
+  });
+  }
 
-//   return (
-//     <>
-// EPL
-//     </>
-//   )
-// }
+  return (
+    <><div id='container' 
+           style={{width:"2000px", height:"1000px", margin:'0 auto'}}>
+      <div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+        <div style={{float:'left'}}>
+        <List
+            header={<div>더비</div>}
+            style={{overflow:"auto",margin:"50px", width:"380px", height:"500px",float:"left"}}
+            itemLayout="horizontal"
+            dataSource={matchs.더비}
+            renderItem={item => (
+            <List.Item>
+                <List.Item.Meta
+                title={<span>{item.name}</span>}
+                description={<>
+                                <span>{item.group_name}</span> / <span>{item.reg_date} /<br/> {item.memo}</span>
+                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} />
+                            </>
+                            }
+                />
+            </List.Item>
+            )}
+        /></div><div style={{float:'left'}}>
+        <List
+            header={<div>챔스권경기</div>}
+            style={{margin:"50px", width:"300px",float:"left",paddingRight:"5px"}}
+            itemLayout="horizontal"
+            dataSource={matchs.챔스권경기}
+            renderItem={item => (
+            <List.Item>
+                <List.Item.Meta
+                title={<span>{item.name}</span>}
+                description={<>
+                                <span>{item.group_name}</span> / <span>{item.reg_date}</span>
+                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} />
+                            </>
+                            }
+                />
+            </List.Item>
+            )}
+        /></div><div style={{float:'left'}}>
+        <List
+            header={<div>강등권경기</div>}
+            style={{margin:"50px", width:"300px",float:"left",paddingRight:"5px"}}
+            itemLayout="horizontal"
+            dataSource={matchs.강등권경기}
+            renderItem={item => (
+            <List.Item>
+                <List.Item.Meta
+                title={<span>{item.name}</span>}
+                description={<>
+                                <span>{item.group_name}</span> / <span>{item.reg_date}</span>
+                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} />
+                            </>
+                            }
+                />
+            </List.Item>
+            )}
+        /></div>
+        </div>
+    </>
+    )
 }
+}  

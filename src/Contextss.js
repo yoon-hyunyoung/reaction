@@ -29,7 +29,7 @@ function Contextsss(){
     });
 
     const change = (e) => {
-        const {value, name} = e.target;
+        const [value, name] = e.target;
         setStu({})
     }
 
