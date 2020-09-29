@@ -5,7 +5,7 @@ import API from 'Api';
 import queryString from 'query-string';
 import { BrowserRouter, Route, Link, NavLink, Switch} from 'react-router-dom';
 import logo from 'assets/logo.JPG';
-import { Menu,  List, Button, Form, Modal,  Input,  Radio,  Select,  Cascader,  DatePicker,  InputNumber,  TreeSelect } from 'antd';
+import { Menu,  List, Button, Checkbox, Form, Modal,  Input,  Radio,  Select,  Cascader,  DatePicker,  InputNumber,  TreeSelect } from 'antd';
 import axios from 'axios';
 import Api from 'Api';
 import img from 'assets/logo.JPG'
@@ -13,21 +13,27 @@ import img from 'assets/logo.JPG'
 const { SubMenu } = Menu;
 
 export default function Yoon(){
+ 
+
   const [group, setGroup] = React.useState([]);
   const [yoons, setYoons] = React.useState({
     EPL :[],
     EFL : [],
     리그1 : []
 });
-  const [form] = Form.useForm();
+
+const [form] = Form.useForm();
+
+const[state, setState] = useState({
+  visible:false
+})
+
 
   const handleClick = e => {
     console.log('click ', e);
     setState({ current: e.key });
   };
-  const[state, setState] = useState({
-    visible:false
-  })
+  
   React.useEffect(()=>{
     API.get("yoonproject/eplallselectview").then(res=>{
       const {data} = res;
@@ -80,6 +86,17 @@ export default function Yoon(){
 })
 
 }
+  const deleting = (seq) => {
+
+    API.delete("yoonproject/eplallselectview/" + seq).then(res=>{
+        return API.get("yoonproject/eplallselectview/")
+    }).then(
+        res=>{
+            const {data} = res;
+            setYoons(prev => data);
+        }
+    )
+  }
 
       return (
         <BrowserRouter>
@@ -118,6 +135,7 @@ export default function Yoon(){
       <Route exact path="/efl" component={EFL}/>
       <Route exact path="/league1" component={LEAGUE1}/>
       <Route exact path="/bigmatch" component={Bigmatch}/>
+      {/* <Route exact path="/login" component={Login}/> */}
       {/*  */}
       <Button type="primary" onClick={showModal}>
           추가</Button>
@@ -173,6 +191,9 @@ export default function Yoon(){
           </Form>
         </Modal>
 
+
+
+        
        </>
        </BrowserRouter>
       );
@@ -191,26 +212,13 @@ function EPL(){
           });
         },[])
   
-  const Delete___Click  = (seq) => {
-    Api.delete('yoonproject/epl/'+ seq) // 삭제 명령을 주고..
-    .then(response =>{
-      return Api.get('yoonproject/epl/') // 삭제된 화면을 출력!
-  }).then(response=>{
-      const{data} = response;
-      setSoccer1(prev => ({
-        ...prev,
-        [seq]:data
-      }));
-
-  });
-  }
-
+ 
         return (
           <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
       <div  style={{overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"430px", height:"700px"}}>{
         soccer1.map((data1, i)=>{
         return <div>{data1.status}<br/><ul>{i+1}위[{data1.name}] 연고지: {data1.group_name} // {data1.win}/ {data1.draw}/ {data1.lose}/ {data1.score}
-          <Button onClick={()=>{Delete___Click(data1.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
+          <Button onClick={()=>{deleting(data1.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
         })}</div>
           </>
         )
@@ -227,26 +235,14 @@ function EFL(){
       });
     },[])
 
-    const Delete__Click  = (seq) => {
-      Api.delete('yoonproject/league1/'+ seq) // 삭제 명령을 주고..
-      .then(response =>{
-        return Api.get('yoonproject/league1?seq='+ seq) // 삭제된 화면을 출력!
-    }).then(response=>{
-        const{data} = response;
-        setSoccer2(prev => ({
-          ...prev,
-          [seq]:data
-        }));
-  
-    });
-    }
+   
 
     return (
       <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
   <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
     soccer2.map((data2, i)=>{
       return <div>{data2.status}<br/><ul>{i+1}위[{data2.name}] 연고지: {data2.group_name} // {data2.win}/ {data2.draw}/ {data2.lose}/ {data2.score}
-      <Button onClick={()=>{Delete__Click(data2.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
+      <Button onClick={()=>{deleting(data2.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
     })}</div>
       </>
     )
@@ -265,29 +261,14 @@ function LEAGUE1(){
       });
     },[])
 
-    const Delete_Click  = (seq) => {
-      Api.delete('yoonproject/league1/'+ seq) // 삭제 명령을 주고..
-      .then(response =>{
-        return Api.get('yoonproject/league1?seq='+ seq) // 삭제된 화면을 출력!
-    }).then(response=>{
-        const{data} = response;
-        setSoccer3(prev => ({
-          ...prev,
-          [seq]:data
-        }));
-  
-    });
-    }
-  
-
-
+    
   return (
     <div style={{height:"1000px", width:"1500px"}}>
       <div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
 <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
   soccer3.map((data3, i)=>{
     return <div>{data3.status}<br/><ul>{i+1}위[{data3.name}] 연고지: {data3.group_name} // {data3.win}/ {data3.draw}/ {data3.lose}/ {data3.score}
-  <Button onClick={()=>{Delete_Click(data3.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
+  <Button onClick={()=>{deleting(data3.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
           
   })}</div>
     </div>
@@ -334,9 +315,6 @@ function Bigmatch(){
     });
   },[])
   
-  // const InsertClick = () => {
-
-  // }
   
   const DeleteClick  = (seq, group) => {
 
@@ -420,4 +398,7 @@ function Bigmatch(){
     </>
     )
 }
-}  
+
+  
+
+};
