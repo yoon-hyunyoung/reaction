@@ -1,38 +1,94 @@
 import React, {useReducer, useState} from 'react';
 import 'antd/dist/antd.css'
-import { AppstoreOutlined, MailOutlined, SettingOutlined, HeartOutlined, ProfileOutlined } from '@ant-design/icons';
+import { HeartOutlined, ProfileOutlined, DeleteFilled, PlusOutlined  } from '@ant-design/icons';
 import API from 'Api';
 import queryString from 'query-string';
 import { BrowserRouter, Route, Link, NavLink, Switch} from 'react-router-dom';
 import logo from 'assets/logo.JPG';
-import { Menu } from 'antd';
+import { Menu,  List, Button, Form, Modal,  Input,  Radio,  Select,  Cascader,  DatePicker,  InputNumber,  TreeSelect } from 'antd';
 import axios from 'axios';
-import { List, Avatar, Button } from 'antd';
-import { SearchOutlined, RestOutlined, PlusOutlined } from '@ant-design/icons';
 import Api from 'Api';
 import img from 'assets/logo.JPG'
 
 const { SubMenu } = Menu;
 
 export default function Yoon(){
+  const [group, setGroup] = React.useState([]);
+  const [yoons, setYoons] = React.useState({
+    EPL :[],
+    EFL : [],
+    리그1 : []
+});
+  const [form] = Form.useForm();
 
+  const handleClick = e => {
+    console.log('click ', e);
+    setState({ current: e.key });
+  };
+  const[state, setState] = useState({
+    visible:false
+  })
+  React.useEffect(()=>{
+    API.get("yoonproject/eplallselectview").then(res=>{
+      const {data} = res;
+      setYoons(prev => data);
+  })
 
-    const [state, setState] = React.useState({current: '1'});
-    const [state2, setState2] = React.useState({current2: 'sub1'});
+},[])
+  React.useEffect(()=>{
 
-        const handleClick = e => {
-          console.log('click ', e)
-        };
-    
-       
+    API.get("yoonproject/eplgroup").then(res=>{
+        const {data} = res;
+        setGroup(prev => data);
+    })
+
+},[])
+  const showModal = () => {
+    setState({
+      visible: true,
+    });
+  };
+
+  const handleOk = e => {
+    console.log(e);
+    setState({
+      visible: false,
+    });
+  };
+
+  const handleCancel = e => {
+    console.log(e);
+    setState({
+      visible: false,
+    });
+  };
+
+  const onFinish = e => {        
+    e.end_date = e.end_date.format("YYYY-MM-DD")
+    console.log(e);
+
+    API.post("yoonproject/eplallselectview/", e).then(res=>{
+        return API.get("yoonproject/eplallselectview/")
+    }).then(
+        res=>{
+            const {data} = res;
+            setYoons(prev => data);
+            form.resetFields();
+            setState(prev => ({
+                visible: false
+            }));     
+})
+
+}
+
       return (
         <BrowserRouter>
        <>
        <Menu
         onClick={handleClick}
         style={{ width: "200px", float:"left" }}
-        defaultSelectedKeys={[state.current]}
-        defaultOpenKeys={[state2.current2]}
+        defaultSelectedKeys={['1']}
+        defaultOpenKeys={['sub1']}
         mode="inline"
       ><img src={img} style={{width:"210px"}}></img>
         <SubMenu
@@ -62,10 +118,65 @@ export default function Yoon(){
       <Route exact path="/efl" component={EFL}/>
       <Route exact path="/league1" component={LEAGUE1}/>
       <Route exact path="/bigmatch" component={Bigmatch}/>
+      {/*  */}
+      <Button type="primary" onClick={showModal}>
+          추가</Button>
+      
+      <Modal
+          title="추가"
+          visible={state.visible}
+          footer={null}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+        <Form form={form} onFinish={onFinish} labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">        
+        <Form.Item  name="name" label="이름">
+          <Input />
+        </Form.Item>
+        <Form.Item  name="status" label="상태">
+          <Select>
+          <Select.Option value=""></Select.Option>
+            <Select.Option value="EPL">EPL</Select.Option>
+            <Select.Option value="EFL">EFL</Select.Option>
+            <Select.Option value="리그1">리그1</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item  name="end_date" label="종료일">
+            <DatePicker />
+        </Form.Item>
+        <Form.Item  name="win" label="win">
+          <Input />
+        </Form.Item>
+        <Form.Item  name="lose" label="lose">
+          <Input />
+        </Form.Item>
+        <Form.Item  name="draw" label="draw">
+          <Input />
+        </Form.Item>
+        <Form.Item  name="score" label="score">
+          <Input />
+        </Form.Item>
+        <Form.Item name="group" label="그룹">
+          <Select>
+          <Select.Option value="">선택</Select.Option>
+              {group.map((v)=>{
+                  return <Select.Option value={v.seq}>{v.name}</Select.Option>            
+              })}
+          </Select>
+          </Form.Item>
+          <Button type="primary" htmlType="submit">
+            등록
+          </Button>
+          <Button onClick={handleCancel}>
+            취소
+          </Button>
+          </Form>
+        </Modal>
+
        </>
        </BrowserRouter>
       );
-        
+      
 
 
 
@@ -80,26 +191,26 @@ function EPL(){
           });
         },[])
   
-        const Delete___Click  = (seq) => {
-          Api.delete('yoonproject/league1/'+ seq) // 삭제 명령을 주고..
-          .then(response =>{
-            return Api.get('yoonproject/league1?seq='+ seq) // 삭제된 화면을 출력!
-        }).then(response=>{
-            const{data} = response;
-            setSoccer1(prev => ({
-              ...prev,
-              [seq]:data
-            }));
-      
-        });
-        }
+  const Delete___Click  = (seq) => {
+    Api.delete('yoonproject/epl/'+ seq) // 삭제 명령을 주고..
+    .then(response =>{
+      return Api.get('yoonproject/epl/') // 삭제된 화면을 출력!
+  }).then(response=>{
+      const{data} = response;
+      setSoccer1(prev => ({
+        ...prev,
+        [seq]:data
+      }));
+
+  });
+  }
 
         return (
           <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
-      <div  style={{overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
+      <div  style={{overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"430px", height:"700px"}}>{
         soccer1.map((data1, i)=>{
-        return <div>{data1.status}<br/><ul>{i+1}위 {data1.name}/ {data1.status}/ {data1.win}/ {data1.draw}/ {data1.lose}/ {data1.score}
-          <Button onClick={()=>{Delete___Click(data1.seq)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} /></ul></div>
+        return <div>{data1.status}<br/><ul>{i+1}위[{data1.name}] 연고지: {data1.group_name} // {data1.win}/ {data1.draw}/ {data1.lose}/ {data1.score}
+          <Button onClick={()=>{Delete___Click(data1.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
         })}</div>
           </>
         )
@@ -134,8 +245,8 @@ function EFL(){
       <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
   <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
     soccer2.map((data2, i)=>{
-      return <div>{data2.status}<br/><ul>{i+1}위 {data2.name}
-      <Button onClick={()=>{Delete__Click(data2.seq)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} /></ul></div>
+      return <div>{data2.status}<br/><ul>{i+1}위[{data2.name}] 연고지: {data2.group_name} // {data2.win}/ {data2.draw}/ {data2.lose}/ {data2.score}
+      <Button onClick={()=>{Delete__Click(data2.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
     })}</div>
       </>
     )
@@ -175,8 +286,8 @@ function LEAGUE1(){
       <div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
 <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
   soccer3.map((data3, i)=>{
-  return <div>{data3.status}<br/><ul>{i+1}위 {data3.name}//{data3.group_name}
-  <Button onClick={()=>{Delete_Click(data3.seq)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} /></ul></div>
+    return <div>{data3.status}<br/><ul>{i+1}위[{data3.name}] 연고지: {data3.group_name} // {data3.win}/ {data3.draw}/ {data3.lose}/ {data3.score}
+  <Button onClick={()=>{Delete_Click(data3.seq)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} /></ul></div>
           
   })}</div>
     </div>
@@ -262,7 +373,7 @@ function Bigmatch(){
                 title={<span>{item.name}</span>}
                 description={<>
                                 <span>{item.group_name}</span> / <span>{item.reg_date} /<br/> {item.memo}</span>
-                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} />
+                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} />
                             </>
                             }
                 />
@@ -280,7 +391,7 @@ function Bigmatch(){
                 title={<span>{item.name}</span>}
                 description={<>
                                 <span>{item.group_name}</span> / <span>{item.reg_date}</span>
-                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} />
+                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} />
                             </>
                             }
                 />
@@ -298,7 +409,7 @@ function Bigmatch(){
                 title={<span>{item.name}</span>}
                 description={<>
                                 <span>{item.group_name}</span> / <span>{item.reg_date}</span>
-                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<RestOutlined />} />
+                                <Button onClick={()=>{DeleteClick(item.seq, item.group)}} style={{float:"right"}} shape="circle" icon={<DeleteFilled />} />
                             </>
                             }
                 />
