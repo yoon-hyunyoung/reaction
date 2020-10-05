@@ -1,19 +1,42 @@
-import React, {useReducer, useState} from 'react';
+import React, { useEffect, useReducer, useState} from 'react';
 import 'antd/dist/antd.css'
-import { HeartOutlined, ProfileOutlined, DeleteFilled, PlusOutlined  } from '@ant-design/icons';
+import { HeartOutlined, ProfileOutlined, DeleteFilled  } from '@ant-design/icons';
 import API from 'Api';
 import queryString from 'query-string';
 import { BrowserRouter, Route, Link, NavLink, Switch} from 'react-router-dom';
-import logo from 'assets/logo.JPG';
 import { Menu,  List, Button, Checkbox, Form, Modal,  Input,  Radio,  Select,  Cascader,  DatePicker,  InputNumber,  TreeSelect } from 'antd';
 import axios from 'axios';
 import Api from 'Api';
-import img from 'assets/logo.JPG'
+import img from 'assets/logo.JPG';
+import LoginContext, { getToken } from 'Utils'
+import Login from 'Login'
+import Empty from 'Empty';
+
+
 
 const { SubMenu } = Menu;
 
 export default function Yoon(){
  
+  const [isLogin, setIsLogin] = React.useState(false);
+
+  useEffect(()=>{
+
+    const token = window.localStorage.getItem("token")
+
+    if (token!=null){
+      setIsLogin(true);
+    }else{
+      setIsLogin(false);
+    }
+  
+});
+
+
+const logout = () => {
+  window.localStorage.removeItem("token");
+  setIsLogin(false);
+}
 
   const [group, setGroup] = React.useState([]);
   const [yoons, setYoons] = React.useState({
@@ -22,12 +45,24 @@ export default function Yoon(){
     리그1 : []
 });
 
-const [form] = Form.useForm();
+  const [form] = Form.useForm();
 
-const[state, setState] = useState({
+  const[state, setState] = useState({
   visible:false
 })
 
+
+  React.useEffect(()=>{
+    API.get("yoonproject/eplallselectview", {
+        headers: {
+            // Authorization: "JWT " + getToken()
+              Authorization: "JWT " + window.localStorage.getItem("token")//getToken()
+        }
+  }).then(res=>{
+      const {data} = res;
+      setYoons(prev => data);
+  })
+},[])
 
   const handleClick = e => {
     console.log('click ', e);
@@ -39,8 +74,8 @@ const[state, setState] = useState({
       const {data} = res;
       setYoons(prev => data);
   })
-
 },[])
+
   React.useEffect(()=>{
 
     API.get("yoonproject/eplgroup").then(res=>{
@@ -101,6 +136,8 @@ const[state, setState] = useState({
       return (
         <BrowserRouter>
        <>
+       <LoginContext.Provider value={{isLogin, setIsLogin}}>
+
        <Menu
         onClick={handleClick}
         style={{ width: "200px", float:"left" }}
@@ -131,12 +168,35 @@ const[state, setState] = useState({
         </SubMenu>
         
       </Menu> 
+      
+      <div>
+      { isLogin ? 
+          <div>
+            <a onClick={logout}>로그아웃</a>
+
+          </div> : 
+          <div>
+            <Link to="/login">로그인</Link>
+          </div>
+        }
+      </div>
+      
+      <Switch>
       <Route exact path="/epl" component={EPL}/>
       <Route exact path="/efl" component={EFL}/>
       <Route exact path="/league1" component={LEAGUE1}/>
       <Route exact path="/bigmatch" component={Bigmatch}/>
-      {/* <Route exact path="/login" component={Login}/> */}
-      {/*  */}
+      <Route path="/login" component={Login}/>     
+      </Switch> 
+      <Route path="/" component={Empty}/>
+
+
+      </LoginContext.Provider>
+
+      
+ 
+
+     
       <Button type="primary" onClick={showModal}>
           추가</Button>
       
@@ -190,7 +250,7 @@ const[state, setState] = useState({
           </Button>
           </Form>
         </Modal>
-
+              
 
 
         
@@ -214,7 +274,7 @@ function EPL(){
   
  
         return (
-          <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+          <>
       <div  style={{overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"430px", height:"700px"}}>{
         soccer1.map((data1, i)=>{
         return <div>{data1.status}<br/><ul>{i+1}위[{data1.name}] 연고지: {data1.group_name} // {data1.win}/ {data1.draw}/ {data1.lose}/ {data1.score}
@@ -238,7 +298,7 @@ function EFL(){
    
 
     return (
-      <><div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+      <>
   <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
     soccer2.map((data2, i)=>{
       return <div>{data2.status}<br/><ul>{i+1}위[{data2.name}] 연고지: {data2.group_name} // {data2.win}/ {data2.draw}/ {data2.lose}/ {data2.score}
@@ -264,7 +324,7 @@ function LEAGUE1(){
     
   return (
     <div style={{height:"1000px", width:"1500px"}}>
-      <div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+      
 <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
   soccer3.map((data3, i)=>{
     return <div>{data3.status}<br/><ul>{i+1}위[{data3.name}] 연고지: {data3.group_name} // {data3.win}/ {data3.draw}/ {data3.lose}/ {data3.score}
@@ -336,9 +396,11 @@ function Bigmatch(){
   }
 
   return (
-    <><div id='container' 
+    <>
+    
+    <div id='container' 
            style={{width:"2000px", height:"1000px", margin:'0 auto'}}>
-      <div style={{float:'left',marginTop:"-60px" , fontSize :"200px"}}><PlusOutlined /></div>
+      
         <div style={{float:'left'}}>
         <List
             header={<div>더비</div>}
@@ -395,6 +457,7 @@ function Bigmatch(){
             )}
         /></div>
         </div>
+        
     </>
     )
 }
