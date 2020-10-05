@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer, useState} from 'react';
 import 'antd/dist/antd.css'
-import { HeartOutlined, ProfileOutlined, DeleteFilled  } from '@ant-design/icons';
+import { HeartOutlined, ProfileOutlined, DeleteFilled, UploadOutlined   } from '@ant-design/icons';
 import API from 'Api';
 import queryString from 'query-string';
 import { BrowserRouter, Route, Link, NavLink, Switch} from 'react-router-dom';
-import { Menu,  List, Button, Checkbox, Form, Modal,  Input,  Radio,  Select,  Cascader,  DatePicker,  InputNumber,  TreeSelect } from 'antd';
+import { Menu,  List, Button, Checkbox, Form, Modal,  Input,  Radio,  Select,  Cascader,  DatePicker,  InputNumber,  TreeSelect, Upload  } from 'antd';
 import axios from 'axios';
 import Api from 'Api';
 import img from 'assets/logo.JPG';
@@ -51,6 +51,10 @@ const logout = () => {
   visible:false
 })
 
+const [fileList, setFileList] = React.useState({
+  fileList: [],
+  uploading: false,
+})
 
   React.useEffect(()=>{
     API.get("yoonproject/eplallselectview", {
@@ -104,14 +108,33 @@ const logout = () => {
     });
   };
 
-  const onFinish = e => {        
+  const onFinish = e => {      
+    
+    const formData = new FormData();
+
+        formData.append("end_date", e.end_date.format("YYYY-MM-DD"));
+        formData.append("name", e.name);
+        formData.append("status", e.status);
+        formData.append("group", e.group);
+        formData.append("image", fileList.fileList[0]);
+        formData.append('win', e.win);
+        formData.append("draw", e.draw);
+        formData.append("lose", e.lose);
+        formData.append("score", e.score);
+
     e.end_date = e.end_date.format("YYYY-MM-DD")
     console.log(e);
-
-    API.post("yoonproject/eplallselectview/", e).then(res=>{
-        return API.get("yoonproject/eplallselectview/")
+    
+    API.post("yoonproject/eplallselectview/", formData, {headers: {
+      // Authorization: "JWT " + getToken()
+        Authorization: "JWT " + window.localStorage.getItem("token")//getToken()
+  }}).then(res=>{
+        return API.get("yoonproject/eplallselectview/", {headers: {
+          // Authorization: "JWT " + getToken()
+            Authorization: "JWT " + window.localStorage.getItem("token")//getToken()
+      }})
     }).then(
-        res=>{
+      res=>{
             const {data} = res;
             setYoons(prev => data);
             form.resetFields();
@@ -121,10 +144,39 @@ const logout = () => {
 })
 
 }
+
+
+const props = {
+  onRemove: file => {
+  setFileList(state => {
+      const index = state.fileList.indexOf(file);
+      const newFileList = state.fileList.slice();
+      newFileList.splice(index, 1);
+      return {
+        fileList: newFileList,
+      };
+    });
+  },
+  beforeUpload: file => {
+    setFileList(state => ({
+      fileList: [...state.fileList, file],
+    }));
+    return false;
+  },
+  fileList: fileList.fileList,
+};
+
+
   const deleting = (seq) => {
 
-    API.delete("yoonproject/eplallselectview/" + seq).then(res=>{
-        return API.get("yoonproject/eplallselectview/")
+    API.delete("yoonproject/eplallselectview/" + seq, {headers: {
+      // Authorization: "JWT " + getToken()
+        Authorization: "JWT " + window.localStorage.getItem("token")//getToken()
+  }}).then(res=>{
+          return API.get("yoonproject/eplallselectview/", {headers: {
+            // Authorization: "JWT " + getToken()
+              Authorization: "JWT " + window.localStorage.getItem("token")//getToken()
+        }})
     }).then(
         res=>{
             const {data} = res;
@@ -162,7 +214,7 @@ const logout = () => {
        
         </SubMenu>
         <SubMenu key="sub2" icon={<ProfileOutlined />} title="빅매치">
-        <Menu.ItemGroup key="g2" title="더비매치/챔스티켓/강등매치">
+        <Menu.ItemGroup key="g2" title="더비매치/챔스매치/강등매치">
           <Menu.Item key="5"><NavLink exact to="/bigmatch">빅매치</NavLink></Menu.Item>
           </Menu.ItemGroup>
         </SubMenu>
@@ -191,12 +243,6 @@ const logout = () => {
       <Route path="/" component={Empty}/>
 
 
-      </LoginContext.Provider>
-
-      
- 
-
-     
       <Button type="primary" onClick={showModal}>
           추가</Button>
       
@@ -221,6 +267,11 @@ const logout = () => {
         </Form.Item>
         <Form.Item  name="end_date" label="종료일">
             <DatePicker />
+        </Form.Item>
+        <Form.Item name='Image' label='이미지'>
+          <Upload {...props}>
+              <Button icon={<UploadOutlined />}>파일선택</Button>
+          </Upload>
         </Form.Item>
         <Form.Item  name="win" label="win">
           <Input />
@@ -253,7 +304,7 @@ const logout = () => {
               
 
 
-        
+        </LoginContext.Provider>
        </>
        </BrowserRouter>
       );
