@@ -1,32 +1,32 @@
 import React, { useEffect, useState }  from 'react';
 import 'App.css';
 import 'antd/dist/antd.css';
-import {Button} from 'antd';
-import Count from 'Count';
-import Act from 'Act';
-import Welcome from 'Welcome';
-import Bbutton from 'Bbutton';
-import Silsoup01 from 'Silsoup01';
-import Silsoup02 from 'Silsoup02';
-import Silsoup03 from 'Silsoup03';
-import Silsoup04 from 'Silsoup04';
-import Parents from 'Parents';
-import Add_p from 'Add_p';
-import Gugudan_p from 'Gugudan_p';
-import Todolist_p from 'Todolist_p';
-import Hovertest from 'Hovertest';
-import CountArray from 'CountArray';
-import Clock from 'Clock'
-import Timer from 'Timer'
-import RSP from 'RSP'
-import Testreducer from 'Testreducer'
-import Reducerclick from 'Reducerclick'
-import Contextapitest from 'Contextapitest'
-import Contextss from 'Contextss'
-import Axiostest from 'Axiostest'
-import Axiosscore from 'Axiosscore';
-import Routertest from 'Routertest';
-import Router01 from 'Router01';
+// import {Button} from 'antd';
+// import Count from 'Count';
+// import Act from 'Act';
+// import Welcome from 'Welcome';
+// import Bbutton from 'Bbutton';
+// import Silsoup01 from 'Silsoup01';
+// import Silsoup02 from 'Silsoup02';
+// import Silsoup03 from 'Silsoup03';
+// import Silsoup04 from 'Silsoup04';
+// import Parents from 'Parents';
+// import Add_p from 'Add_p';
+// import Gugudan_p from 'Gugudan_p';
+// import Todolist_p from 'Todolist_p';
+// import Hovertest from 'Hovertest';
+// import CountArray from 'CountArray';
+// import Clock from 'Clock'
+// import Timer from 'Timer'
+// import RSP from 'RSP'
+// import Testreducer from 'Testreducer'
+// import Reducerclick from 'Reducerclick'
+// import Contextapitest from 'Contextapitest'
+// import Contextss from 'Contextss'
+// import Axiostest from 'Axiostest'
+// import Axiosscore from 'Axiosscore';
+// import Routertest from 'Routertest';
+// import Router01 from 'Router01';
 import Yoon from 'Yoon';
 
 

@@ -323,7 +323,7 @@ function LEAGUE1(){
 
     
   return (
-    <div style={{height:"1000px", width:"1500px"}}>
+    <div style={{height:"1000px", width:"500px", float:"left"}}>
       
 <div style={{ overflow:"auto", float:"left", marginTop:"50px",marginLeft:"100px", width:"350px", height:"700px"}}>{
   soccer3.map((data3, i)=>{
