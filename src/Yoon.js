@@ -74,7 +74,10 @@ const [fileList, setFileList] = React.useState({
   };
   
   React.useEffect(()=>{
-    API.get("yoonproject/eplallselectview").then(res=>{
+    API.get("yoonproject/eplallselectview", {headers: {
+      // Authorization: "JWT " + getToken()
+        Authorization: "JWT " + window.localStorage.getItem("token")//getToken()
+  }}).then(res=>{
       const {data} = res;
       setYoons(prev => data);
   })
@@ -82,7 +85,10 @@ const [fileList, setFileList] = React.useState({
 
   React.useEffect(()=>{
 
-    API.get("yoonproject/eplgroup").then(res=>{
+    API.get("yoonproject/eplgroup", {headers: {
+      // Authorization: "JWT " + getToken()
+        Authorization: "JWT " + window.localStorage.getItem("token")//getToken()
+  }}).then(res=>{
         const {data} = res;
         setGroup(prev => data);
     })
